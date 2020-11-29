@@ -1,0 +1,7 @@
+[package]
+name = "shared"
+version = "0.1.0"
+edition = "2018"
+
+[dependencies]
+druid= { git = "https://github.com/linebender/druid" }

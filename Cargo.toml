@@ -1,0 +1,21 @@
+[package]
+name = "livecoding"
+version = "0.1.0"
+edition = "2018"
+
+[workspace]
+members = [
+  "hot_reload_lib",
+  "shared",
+  "view",
+]
+
+[dependencies]
+hot_reload_lib = { path = "hot_reload_lib" }
+shared = { path = "shared" }
+druid = { git = "https://github.com/linebender/druid"}
+
+
+[[bin]]
+name = "app"
+path = "app/main.rs"
