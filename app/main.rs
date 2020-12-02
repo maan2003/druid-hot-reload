@@ -1,5 +1,5 @@
 extern crate druid;
-extern crate hot_reload_lib;
+extern crate hot_reload;
 extern crate shared;
 
 use std::any::Any;
@@ -11,7 +11,7 @@ use druid::{
     AppLauncher, Event, ExtEventSink, Lens, LifeCycle, LifeCycleCtx, Selector, Target, Widget,
     WidgetExt, WidgetPod, WindowDesc,
 };
-use hot_reload_lib::HotReloadLib;
+use hot_reload::HotReloadLib;
 use shared::AppState;
 
 const RELOAD: Selector<()> = Selector::new("druid-hot-reload.reload");
@@ -21,7 +21,7 @@ fn main() {
     let main_window = WindowDesc::new({
         let sink = sink.clone();
         move || {
-            let lib = HotReloadLib::new("./target/debug", "view", move || {
+            let lib = HotReloadLib::new("./target/debug/libview.so", move || {
                 let sink = sink.lock().unwrap();
                 let sink = sink.as_ref().unwrap();
                 sink.submit_command(RELOAD, (), Target::Global).unwrap();
@@ -33,6 +33,7 @@ fn main() {
     *sink.lock().unwrap() = Some(launcher.get_external_handle());
 
     launcher
+        .use_simple_logger()
         .launch(AppState::default())
         .expect("Failed to launch application");
 }
@@ -47,9 +48,11 @@ impl HotReloaderWidget {
         // droping it before unloading the library
         drop(self.inner.take());
         self.lib.update();
-        let load = self
-            .lib
-            .load_symbol::<fn() -> Box<dyn Widget<AppState>>>("testing");
+        let load = unsafe {
+            self.lib
+                .load_symbol::<fn() -> Box<dyn Widget<AppState>>>("testing")
+                .unwrap()
+        };
         let returned_widget = load();
         self.inner = Some(WidgetPod::new(returned_widget));
     }
@@ -112,6 +115,7 @@ impl Widget<AppState> for HotReloaderWidget {
         data: &AppState,
         env: &druid::Env,
     ) -> druid::Size {
+        self.inner.as_mut().unwrap().set_origin(ctx, data, env, (0.0, 0.0).into());
         self.inner.as_mut().unwrap().layout(ctx, bc, data, env)
     }
 

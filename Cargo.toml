@@ -5,15 +5,15 @@ edition = "2018"
 
 [workspace]
 members = [
-  "hot_reload_lib",
+  "hot-reload",
   "shared",
   "view",
 ]
 
 [dependencies]
-hot_reload_lib = { path = "hot_reload_lib" }
+hot-reload = { path = "hot-reload" }
 shared = { path = "shared" }
-druid = { git = "https://github.com/linebender/druid"}
+druid = { path = "../druid/druid"}
 
 
 [[bin]]

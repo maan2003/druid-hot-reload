@@ -4,4 +4,6 @@ version = "0.1.0"
 edition = "2018"
 
 [dependencies]
-druid= { git = "https://github.com/linebender/druid" }
+druid= { path = "../../druid/druid", default-features=false }
+# druid= { git = "https://github.com/linebender/druid", default-features=false, features=['x11'] }
+

@@ -1,16 +1,25 @@
 use druid::widget::*;
 use druid::{Widget, WidgetExt};
+use shared::AppState;
 
 #[no_mangle]
-pub fn testing() -> Box<dyn Widget<shared::AppState>> {
+pub fn testing() -> Box<dyn Widget<AppState>> {
     Flex::column()
         .with_child(
-            TextBox::new()
-                .with_placeholder("Hello just added a new text box!!")
-                .lens(shared::AppState::text)
-                .padding(30.0),
+            Label::new("hello World")
+                .with_text_size(36.0)
+                .lens(AppState::text),
         )
-        .with_child(Label::new("Helllo World"))
-        .with_child(Checkbox::new("I can hot reload.").lens(shared::AppState::checked))
+        .with_child(
+            Flex::row()
+                .with_child(Checkbox::new("Helllo world").padding(10.0))
+                .lens(AppState::checked),
+        )
+        .with_child(Slider::new().lens(AppState::float))
+        .with_child(
+            Checkbox::new("New one")
+                .lens(AppState::checked)
+                .padding(20.0),
+        )
         .boxed()
 }
