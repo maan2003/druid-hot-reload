@@ -73,8 +73,7 @@ impl Widget<AppState> for HotReloaderWidget {
                 return;
             }
         }
-        // event cause panic about inner receiving event without being laid out
-        // self.inner.as_mut().unwrap().event(ctx, event, data, env)
+        self.inner.as_mut().unwrap().event(ctx, event, data, env)
     }
 
     fn lifecycle(
