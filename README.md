@@ -1,8 +1,6 @@
 # Druid hot reloading
 
-This is an experminent to hot reload druid apps. Code in `hot_reload_lib` is mostly taken from https://github.com/irh/rust-hot-reloading with minor changes (update notify to 5.0-pre).
-
-This is only is tested on linux. Although porting should only require small changes in `hot_reload_lib`.
+This is an experminent to hot reload druid apps. Code in `hot_reload` is adapted from https://github.com/irh/rust-hot-reloading.
 
 ## How to Run
 ```bash
